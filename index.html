@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฝึกหัดการบ้าน 2: การเลือก Chart (Data Visualization)</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f4f6f9; color: #2c3e50; margin: 0; padding: 24px; }
+    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 32px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    header { text-align: center; margin-bottom: 24px; border-bottom: 2px solid #edf2f7; padding-bottom: 16px; }
+    header h1 { color: #1a365d; margin: 0 0 8px; font-size: 24px; }
+    header p { color: #718096; margin: 0; font-size: 15px; }
+
+    .tabs { display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px; overflow-x: auto; }
+    .tab-btn { padding: 12px 20px; border: none; background: none; font-size: 15px; font-weight: 600; cursor: pointer; color: #718096; border-bottom: 3px solid transparent; white-space: nowrap; }
+    .tab-btn.active { color: #2b6cb0; border-bottom: 3px solid #2b6cb0; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .card h3 { margin-top: 0; font-size: 17px; color: #2d3748; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .badge { display: inline-block; background: #e2e8f0; color: #2d3748; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+
+    .hw-box { border-left: 4px solid #2b6cb0; background: #ebf8ff; padding: 16px; border-radius: 6px; margin-bottom: 16px; }
+    .hw-box h4 { margin: 0 0 6px; color: #2b6cb0; font-size: 16px; }
+
+    .quiz-container { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 24px; }
+    .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 16px; color: #4a5568; }
+    .question-title { font-size: 17px; font-weight: bold; margin-bottom: 16px; line-height: 1.5; color: #1a202c; }
+    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    @media(max-width:650px){ .opt-grid { grid-template-columns: 1fr; } }
+    
+    .opt-btn { background: #f8fafc; border: 2px solid #cbd5e0; padding: 14px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; transition: 0.15s; }
+    .opt-btn:hover { background: #edf2f7; }
+    .opt-btn.correct { background: #c6f6d5 !important; border-color: #38a169 !important; color: #22543d !important; }
+    .opt-btn.wrong { background: #fed7d7 !important; border-color: #e53e3e !important; color: #742a2a !important; }
+    .opt-btn.disabled { pointer-events: none; }
+
+    .feedback { padding: 14px; border-radius: 8px; font-size: 14px; line-height: 1.5; margin-bottom: 16px; display: none; }
+    .btn-action { background: #2b6cb0; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    .btn-action:hover { background: #2c5282; }
+    .btn-restart { background: #718096; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>📈 การบ้าน 2: Data Visualization & Chart Decision Hub</h1>
+    <p>ระบบเรียนรู้ประเภท Chart, เฉลยแบบฝึกหัด และคลังข้อสอบสุ่ม 10 ข้อ</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">1. สรุปประเภท Chart & วิธีเลือก</button>
+    <button class="tab-btn" onclick="switchTab(1)">2. เฉลยการบ้าน 2 (Q1 - Q5)</button>
+    <button class="tab-btn" onclick="switchTab(2)">3. 🎲 แบบทดสอบสุ่ม 10 ข้อ</button>
+  </div>
+
+  <!-- TAB 1: CHART GUIDE -->
+  <div class="tab-content active" id="tab-0">
+    <div class="card" style="background:#ebf8ff; border-color:#bee3f8;">
+      <h3 style="color:#2b6cb0;">🎯 หลัก 4 ข้อในการเลือก Chart ให้ตรงโจทย์</h3>
+      <ul>
+        <li><strong>1. ดูแนวโน้มตามเวลา (Trend over Time):</strong> มีเรื่องของ วัน, เดือน, ปี &rarr; <span class="badge">Line Chart</span></li>
+        <li><strong>2. เปรียบเทียบข้ามกลุ่ม (Comparison):</strong> เปรียบเทียบสินค้า, บุคลากร, หมวดหมู่ &rarr; <span class="badge">Column / Bar Chart</span></li>
+        <li><strong>3. ดูสัดส่วนร้อยละ (Composition / Part-to-Whole):</strong> รวมกันได้ 100% หรือดูสัดส่วน Mix &rarr; <span class="badge">Pie / Donut</span> หรือ <span class="badge">100% Stacked Chart</span></li>
+        <li><strong>4. หาความสัมพันธ์ / เปรียบเทียบ 2 สเกล (Relationship):</strong> &rarr; <span class="badge">Scatter Plot</span> หรือ <span class="badge">Combo Chart (Dual Axis)</span></li>
+      </ul>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>📈 Line Chart</h3>
+        <p><strong>ใช้เมื่อ:</strong> ติดตามการขึ้น-ลงตามช่วงเวลาอย่างต่อเนื่อง (Jan - Jun, รายปี)</p>
+        <p><strong>Keyword:</strong> <em>Over time, Trend, Monthly, Changed</em></p>
+      </div>
+      <div class="card">
+        <h3>📊 Column / Bar Chart</h3>
+        <p><strong>ใช้เมื่อ:</strong> เปรียบเทียบค่าเชิงปริมาณระหว่างหมวดหมู่ที่แยกจากกัน</p>
+        <p><strong>Keyword:</strong> <em>Compare, Across categories, Ranking</em></p>
+      </div>
+      <div class="card">
+        <h3>🥧 Pie / Doughnut Chart</h3>
+        <p><strong>ใช้เมื่อ:</strong> ดูสัดส่วนส่วนย่อยเทียบกับยอดรวมทั้งหมด 100%</p>
+        <p><strong>Keyword:</strong> <em>Proportion, Share, Contribution, %</em></p>
+      </div>
+      <div class="card">
+        <h3>🧱 100% Stacked Chart</h3>
+        <p><strong>ใช้เมื่อ:</strong> ดูสัดส่วนผสม (Mix) ที่เปลี่ยนแปลงไปในแต่ละเดือน/ปี</p>
+        <p><strong>Keyword:</strong> <em>Mix of channels over time</em></p>
+      </div>
+      <div class="card">
+        <h3>📉 Combo Chart (Dual Axis)</h3>
+        <p><strong>ใช้เมื่อ:</strong> เปรียบเทียบตัวแปร 2 ตัวที่มีสเกลต่างกันมากในกราฟเดียว</p>
+        <p><strong>Keyword:</strong> <em>Aligned with, Growth vs Revenue, Secondary Axis</em></p>
+      </div>
+      <div class="card">
+        <h3>🎯 Scatter Plot</h3>
+        <p><strong>ใช้เมื่อ:</strong> หาความสัมพันธ์ทางสถิติว่า X ส่งผลต่อ Y หรือไม่</p>
+        <p><strong>Keyword:</strong> <em>Correlation, Relationship between</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: HOMEWORK 2 DETAILED EXPLANATIONS -->
+  <div class="tab-content" id="tab-1">
+    <div class="hw-box">
+      <h4>Q1: How has revenue changed over time?</h4>
+      <p><strong>คำตอบ: Line Chart</strong></p>
+      <p><strong>เหตุผล:</strong> ดูแนวโน้มตามลำดับเวลา (Table 1: Month และ Revenue)</p>
+    </div>
+    <div class="hw-box">
+      <h4>Q2: Compare total revenue across product categories</h4>
+      <p><strong>คำตอบ: Column Chart หรือ Bar Chart</strong></p>
+      <p><strong>เหตุผล:</strong> เปรียบเทียบยอดขายเชิงปริมาณระหว่างหมวดสินค้า 4 หมวด (Table 2)</p>
+    </div>
+    <div class="hw-box">
+      <h4>Q3: What proportion of total revenue does each product category contribute?</h4>
+      <p><strong>คำตอบ: Pie Chart หรือ Doughnut Chart</strong></p>
+      <p><strong>เหตุผล:</strong> คำว่า Proportion สื่อถึงการดูสัดส่วนร้อยละเทียบกับผลรวมทั้งหมด (Table 2)</p>
+    </div>
+    <div class="hw-box">
+      <h4>Q4: How has the mix of acquisition channels changed over time?</h4>
+      <p><strong>คำตอบ: 100% Stacked Column Chart</strong></p>
+      <p><strong>เหตุผล:</strong> คำว่า Mix over time คือดูสัดส่วนผสมที่เปลี่ยนไปในแต่ละเดือน (Table 3)</p>
+    </div>
+    <div class="hw-box">
+      <h4>Q5: Is revenue growth aligned with order growth?</h4>
+      <p><strong>คำตอบ: Combo Chart with Dual Axis (แกนคู่)</strong></p>
+      <p><strong>เหตุผล:</strong> Revenue (หลักร้อย) กับ Orders (หลักพัน) สเกลต่างกัน จึงต้องใช้ 2 แกน Y เทียบแนวโน้ม (Table 1)</p>
+    </div>
+  </div>
+
+  <!-- TAB 3: QUIZ (10 RANDOM FROM 20) -->
+  <div class="tab-content" id="tab-2">
+    <div class="quiz-container">
+      <div id="quiz-area">
+        <div class="quiz-header">
+          <span>ข้อที่ <span id="q-curr">1</span> / 10</span>
+          <span>คะแนน: <span id="q-score" style="color:#2b6cb0;">0</span> / 10</span>
+        </div>
+        <div class="question-title" id="q-text">กำลังโหลดโจทย์...</div>
+        <div class="opt-grid" id="q-opts"></div>
+        <div id="q-feedback" class="feedback"></div>
+        <div style="display:flex; justify-content:space-between; margin-top:16px;">
+          <button class="btn-action btn-restart" onclick="startQuiz()">🔄 สุ่มโจทย์ใหม่ 10 ข้อ</button>
+          <button class="btn-action" id="btn-next" onclick="nextQuestion()" style="display:none;">ข้อถัดไป ➔</button>
+        </div>
+      </div>
+      <div id="score-area" style="display:none; text-align:center; padding:30px;">
+        <h2 style="color:#2b6cb0; margin-bottom:10px;">🎉 ทำแบบทดสอบครบแล้ว!</h2>
+        <p style="font-size:18px;">คะแนนที่ได้: <strong id="final-score" style="color:#2b6cb0; font-size:24px;">0</strong> / 10</p>
+        <button class="btn-action" onclick="startQuiz()">เริ่มทำใหม่อีกรอบ (สุ่มชุดใหม่)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(i) {
+    document.querySelectorAll('.tab-btn').forEach((b, idx) => b.classList.toggle('active', idx === i));
+    document.querySelectorAll('.tab-content').forEach((c, idx) => c.classList.toggle('active', idx === i));
+  }
+
+  const bank = [
+    { q: "ต้องการติดตามยอดขายสินค้าตั้งแต่วันที่ 1 ม.ค. ถึง 31 ธ.ค. เพื่อดูว่าช่วงใดพุ่งสูงหรือซบเซา ควรเลือก Chart ใด?", opts: ["Line Chart (กราฟเส้น)", "Pie Chart (กราฟวงกลม)", "Scatter Plot", "Treemap"], a: 0, exp: "ข้อมูลลำดับเวลาต่อเนื่อง (Time-series / Trend) ใช้ Line Chart ดีที่สุด" },
+    { q: "ต้องการเปรียบเทียบยอดขายรวมของพนักงานขาย 5 คนในแผนก เพื่อจัดอันดับคนทำยอดได้สูงสุด ควรเลือก Chart ใด?", opts: ["Scatter Plot", "Column หรือ Bar Chart (กราฟแท่ง)", "100% Stacked Area", "Bubble Chart"], a: 1, exp: "เปรียบเทียบข้อมูลเชิงปริมาณระหว่างหมวดหมู่ชัดเจน ใช้ Column หรือ Bar Chart" },
+    { q: "ต้องการแสดงสัดส่วนว่างบการตลาด 100% ถูกจัดสรรให้แต่ละช่องทางกี่เปอร์เซ็นต์ ควรเลือก Chart ใด?", opts: ["Line Chart", "Pie หรือ Doughnut Chart", "Waterfall Chart", "Histogram"], a: 1, exp: "การดูสัดส่วนร้อยละเทียบภาพรวมทั้งหมด (Part-to-whole) ใช้ Pie หรือ Doughnut Chart" },
+    { q: "ต้องการเปรียบเทียบสัดส่วนช่องทางการชำระเงิน (บัตรเครดิต, โอนเงิน, เงินสด) ว่าเปลี่ยนแปลงอย่างไรในแต่ละเดือนตลอดทั้งปี?", opts: ["100% Stacked Column / Area Chart", "Pie Chart เดี่ยวๆ", "Scatter Plot", "Radar Chart"], a: 0, exp: "ดูสัดส่วนผสม (Mix) ที่เปลี่ยนแปลงตามกาลเวลา ใช้ 100% Stacked Chart" },
+    { q: "ต้องการตรวจสอบว่า 'เงินโฆษณาที่จ่ายไป' มีผลทำให้ 'จำนวนลูกค้าใหม่' เพิ่มขึ้นตามจริงหรือไม่?", opts: ["Pie Chart", "Scatter Plot (กราฟจุด)", "Bar Chart", "Line Chart"], a: 1, exp: "การหาความสัมพันธ์ (Correlation) ระหว่าง 2 ตัวแปรตัวเลข ใช้ Scatter Plot" },
+    { q: "ต้องการพล็อตกราฟเปรียบเทียบ 'ยอดขาย (หลักแสนบาท)' และ 'จำนวนชิ้นที่ขาย (หลักสิบชิ้น)' ตามรายเดือนในรูปเดียวกัน?", opts: ["Combo Chart with Dual Axis (กราฟผสม 2 แกน)", "Line Chart แกนเดียว", "Pie Chart", "Area Chart"], a: 0, exp: "ตัวแปร 2 ตัวที่มีสเกลต่างกันมาก ต้องใช้ Combo Chart และเปิด Secondary Axis" },
+    { q: "หากมีข้อมูลหมวดหมู่สินค้า 15 หมวด และแต่ละหมวดมีชื่อยาวมาก ควรใช้ Chart แบบใดเพื่อให้อ่านง่าย?", opts: ["Column Chart (แท่งแนวตั้ง)", "Bar Chart (กราฟแท่งแนวนอน)", "Pie Chart", "Line Chart"], a: 1, exp: "Bar Chart แนวนอนมีพื้นที่แกน Y กว้าง เหมาะกับข้อความชื่อหมวดยาวๆ" },
+    { q: "ต้องการแสดงเส้นทางของรายได้ หักลบต้นทุนทีละขั้น จนเหลือเป็นกำไรสุทธิ ควรใช้ Chart ใด?", opts: ["Waterfall Chart (กราฟน้ำตก)", "Line Chart", "Doughnut Chart", "Scatter Plot"], a: 0, exp: "Waterfall Chart เหมาะที่สุดสำหรับการดูผลกระทบแบบสะสมบวก/ลบ" },
+    { q: "ต้องการแสดงการกระจายตัวและความถี่ของช่วงคะแนนสอบของนักเรียน 200 คนว่าตกอยู่ช่วงใดบ้าง?", opts: ["Histogram (ฮิสโตแกรม)", "Pie Chart", "Line Chart", "Stacked Bar"], a: 0, exp: "Histogram ใช้วัดความถี่และการแจกแจงทางสถิติของข้อมูลต่อเนื่องตามช่วง (Bins)" },
+    { q: "โจทย์ระบุว่า: 'What proportion of total visitors comes from mobile devices?' ควรเลือกใช้ชาร์ตกลุ่มใด?", opts: ["Part-to-whole (Pie / Donut)", "Trend over time (Line)", "Relationship (Scatter)", "Distribution"], a: 0, exp: "Keyword คำว่า 'Proportion' คือสัดส่วนส่วนย่อยต่อภาพรวม" },
+    { q: "ต้องการเปรียบเทียบสมรรถนะของรถยนต์ 2 คันใน 5 มิติ (ความเร็ว, ประหยัดน้ำมัน, ความจุ, ปลอดภัย, ราคา) พร้อมกัน?", opts: ["Radar Chart (กราฟใยแมงมุม)", "Line Chart", "Pie Chart", "Histogram"], a: 0, exp: "Radar Chart เหมาะกับการเปรียบเทียบข้อมูลหลายมิติพร้อมๆ กัน" },
+    { q: "ต้องการเห็นยอดขายรวมทั้งบริษัท พร้อมทั้งเห็นสัดส่วนยอดขายย่อยของแต่ละภาครองรับอยู่ในแท่งเดียวกันแต่ละไตรมาส?", opts: ["Stacked Column Chart (แท่งซ้อนรวม)", "100% Stacked Column", "Pie Chart", "Scatter Plot"], a: 0, exp: "Stacked Column ปกติจะโชว์ทั้งยอดรวมทั้งหมดและความสูงของส่วนประกอบย่อย" },
+    { q: "ข้อใดเป็นข้อผิดพลาดร้ายแรงที่สุดในการใช้ Pie Chart?", opts: ["สัดส่วนรวมกันแล้วไม่ได้ 100%", "ใช้แสดงข้อมูลสัดส่วน", "มีชิ้นพาย 3 ชิ้น", "ใส่เปอร์เซ็นต์กำกับ"], a: 0, exp: "Pie Chart ทุกชิ้นรวมกันต้องได้ 100% เสมอ" },
+    { q: "โจทย์ถามว่า: 'Is website traffic growth aligned with server cost increase?' วิธีดูความสอดคล้องที่ดีที่สุดคือข้อใด?", opts: ["Combo Chart แกนคู่ หรือ Scatter Plot", "Pie Chart", "Bar Chart แนวนอน", "Treemap"], a: 0, exp: "Aligned with คือการดูแนวโน้มว่าล้อไปด้วยกันไหม ต้องใช้ Combo แกนคู่" },
+    { q: "ถ้าต้องการแสดงข้อมูลส่วนแบ่งการตลาด (Market Share) ที่มีคู่แข่งถึง 15 บริษัท ข้อใดเหมาะสมกว่า Pie Chart?", opts: ["Bar Chart แนวนอนเรียงจากมากไปน้อย", "Scatter Plot", "Line Chart", "Radar Chart"], a: 0, exp: "เมื่อมีหมวดหมู่เกิน 6 ชิ้น Pie Chart จะแน่นเกินไป ควรใช้ Bar Chart แทน" },
+    { q: "ต้องการแสดงอุณหภูมิเฉลี่ยของโลกที่เปลี่ยนแปลงไปในรอบ 50 ปีที่ผ่านมา ควรใช้ Chart ใด?", opts: ["Line Chart", "Pie Chart", "Doughnut Chart", "Waterfall Chart"], a: 0, exp: "ลำดับเวลาต่อเนื่องระยะยาว ต้องใช้ Line Chart" },
+    { q: "ต้องการแสดงยอดขายสินค้าแยกตามโครงสร้างหมวดหมู่หลักและหมวดหมู่ย่อยเป็นพื้นที่สี่เหลี่ยมตามลำดับชั้น?", opts: ["Treemap", "Line Chart", "Scatter Plot", "Radar Chart"], a: 0, exp: "Treemap ออกแบบมาเพื่อแสดงข้อมูลลำดับชั้น (Hierarchy)" },
+    { q: "ต้องการดูว่าช่วงอายุของลูกค้าส่วนใหญ่อยู่ที่ช่วงใด (เช่น 20-29, 30-39, 40-49)?", opts: ["Histogram หรือ Column Chart จัดกลุ่มอายุ", "Pie Chart", "Line Chart", "Scatter Plot"], a: 0, exp: "การจัดกลุ่มช่วงตัวเลขดูความหนาแน่น ต้องใช้ Histogram" },
+    { q: "คำว่า 'Acquisition Channel Mix' ในการบ้าน 2 ข้อ Q4 สื่อถึงวัตถุประสงค์ใด?", opts: ["Composition / สัดส่วนผสมขององค์ประกอบ", "Time Trend เดี่ยวๆ", "Correlation สถิติ", "Ranking ธรรมดา"], a: 0, exp: "Mix คือส่วนประกอบรวมกัน (Composition)" },
+    { q: "เหตุผลสำคัญที่สุดที่ Table 1 ในการบ้าน 2 ข้อ Q1 ต้องใช้ Line Chart คืออะไร?", opts: ["ข้อมูลแกน X เป็นลำดับเวลาต่อเนื่อง (Jan - Jun)", "ข้อมูลมี 2 คอลัมน์", "ตัวเลขรายได้น้อย", "Excel สุ่มมา"], a: 0, exp: "Line Chart ออกแบบมาเพื่อข้อมูลลำดับเวลา (Time-series)" }
+  ];
+
+  let currentSet = [];
+  let currIdx = 0;
+  let currentScore = 0;
+
+  function startQuiz() {
+    currentSet = [...bank].sort(() => 0.5 - Math.random()).slice(0, 10);
+    currIdx = 0;
+    currentScore = 0;
+    document.getElementById('q-score').innerText = '0';
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('score-area').style.display = 'none';
+    renderQ();
+  }
+
+  function renderQ() {
+    const q = currentSet[currIdx];
+    document.getElementById('q-curr').innerText = currIdx + 1;
+    document.getElementById('q-text').innerText = `${currIdx + 1}. ${q.q}`;
+    const opts = document.getElementById('q-opts');
+    opts.innerHTML = '';
+    document.getElementById('q-feedback').style.display = 'none';
+    document.getElementById('btn-next').style.display = 'none';
+
+    q.opts.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerText = opt;
+      btn.onclick = () => selectOpt(idx, q.a, q.exp);
+      opts.appendChild(btn);
+    });
+  }
+
+  function selectOpt(sel, ans, exp) {
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.add('disabled'));
+    const fb = document.getElementById('q-feedback');
+    fb.style.display = 'block';
+
+    if (sel === ans) {
+      btns[sel].classList.add('correct');
+      fb.style.background = '#e6f7ec';
+      fb.style.color = '#0d6835';
+      fb.style.border = '1px solid #a3e0b8';
+      fb.innerHTML = `🎉 <strong>ถูกต้อง!</strong> ${exp}`;
+      currentScore++;
+      document.getElementById('q-score').innerText = currentScore;
+    } else {
+      btns[sel].classList.add('wrong');
+      btns[ans].classList.add('correct');
+      fb.style.background = '#fde8e8';
+      fb.style.color = '#9b1c1c';
+      fb.style.border = '1px solid #f8b4b4';
+      fb.innerHTML = `❌ <strong>ยังไม่ถูกต้อง</strong> (เฉลย: ${currentSet[currIdx].opts[ans]})<br>${exp}`;
+    }
+
+    const nxt = document.getElementById('btn-next');
+    nxt.style.display = 'inline-block';
+    nxt.innerText = currIdx === 9 ? 'ดูผลคะแนน 🏁' : 'ข้อถัดไป ➔';
+  }
+
+  function nextQuestion() {
+    currIdx++;
+    if (currIdx < 10) renderQ();
+    else {
+      document.getElementById('quiz-area').style.display = 'none';
+      document.getElementById('score-area').style.display = 'block';
+      document.getElementById('final-score').innerText = currentScore;
+    }
+  }
+
+  startQuiz();
+</script>
+
+</body>
+</html>
