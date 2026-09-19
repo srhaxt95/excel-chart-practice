@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>แบบฝึกหัดการบ้าน 2: การเลือก Chart (Data Visualization)</title>
+  <title>Excel_Chart_Exercise 2: การเลือก Chart (Data Visualization)</title>
+  <!-- Chart.js สำหรับวาดกราฟจริง คมชัดและ Interactive -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f4f6f9; color: #2c3e50; margin: 0; padding: 24px; }
-    .container { max-width: 1050px; margin: 0 auto; background: #fff; padding: 32px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    header { text-align: center; margin-bottom: 24px; border-bottom: 2px solid #edf2f7; padding-bottom: 16px; }
-    header h1 { color: #1a365d; margin: 0 0 8px; font-size: 25px; }
+    body { background-color: #f0f3f8; color: #2c3e50; margin: 0; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    
+    header { text-align: center; margin-bottom: 24px; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; }
+    header h1 { color: #1a365d; margin: 0 0 8px; font-size: 24px; }
     header p { color: #718096; margin: 0; font-size: 15px; }
 
     .tabs { display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px; overflow-x: auto; }
@@ -18,29 +21,31 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Framework Overview */
-    .framework-banner { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 10px; padding: 18px 22px; margin-bottom: 24px; }
-    .framework-banner h3 { margin-top: 0; color: #2b6cb0; font-size: 18px; }
+    /* Framework Box */
+    .framework-card { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 10px; padding: 18px 22px; margin-bottom: 24px; }
+    .framework-card h3 { margin-top: 0; color: #2b6cb0; font-size: 17px; }
     .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
     .framework-item { background: #fff; border-radius: 8px; padding: 12px; border-left: 4px solid #2b6cb0; font-size: 13.5px; }
 
-    /* Visual Grid */
+    /* Grid for Chart Types */
     .grid-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-    .chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: transform 0.2s; }
-    .chart-card:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
-    
-    .chart-preview-box { background: #f8fafc; border-bottom: 1px solid #edf2f7; padding: 16px; display: flex; justify-content: center; align-items: center; min-height: 180px; }
-    .chart-info { padding: 18px; }
-    .chart-info h3 { margin: 0 0 8px; font-size: 17px; color: #1a202c; display: flex; align-items: center; justify-content: space-between; }
+    .chart-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .chart-box { position: relative; height: 190px; width: 100%; margin-bottom: 12px; }
+    .chart-info h3 { margin: 0 0 6px; font-size: 16px; color: #1a202c; display: flex; justify-content: space-between; align-items: center; }
     .badge { background: #edf2f7; color: #4a5568; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
-    .chart-info p { margin: 6px 0; font-size: 13.5px; line-height: 1.5; color: #4a5568; }
-    .keyword-tag { color: #2b6cb0; font-family: monospace; font-size: 12.5px; background: #eef6fc; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+    .chart-info p { margin: 4px 0; font-size: 13px; line-height: 1.5; color: #4a5568; }
+    .keyword-tag { color: #2b6cb0; font-family: monospace; font-size: 12px; background: #eef6fc; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
 
-    /* Homework 2 Tab */
-    .hw-box { border-left: 4px solid #2b6cb0; background: #ebf8ff; padding: 16px; border-radius: 6px; margin-bottom: 16px; }
-    .hw-box h4 { margin: 0 0 6px; color: #2b6cb0; font-size: 16px; }
+    /* Homework 2 Layout */
+    .hw-container { display: flex; flex-direction: column; gap: 24px; }
+    .hw-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; background: #fafbfc; }
+    .hw-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+    @media(max-width: 768px){ .hw-card-grid { grid-template-columns: 1fr; } }
+    .hw-details h4 { margin: 0 0 8px; color: #2b6cb0; font-size: 17px; }
+    .hw-details p { margin: 6px 0; font-size: 14px; line-height: 1.6; }
+    .ans-badge { background: #2b6cb0; color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 13px; }
 
-    /* Quiz Tab */
+    /* Quiz */
     .quiz-container { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 24px; }
     .quiz-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 16px; color: #4a5568; }
     .question-title { font-size: 17px; font-weight: bold; margin-bottom: 16px; line-height: 1.5; color: #1a202c; }
@@ -64,299 +69,159 @@
 <div class="container">
   <header>
     <h1>📈 การบ้าน 2: Data Visualization & Chart Decision Hub</h1>
-    <p>คู่มือเลือก Chart พร้อมภาพตัวอย่างจริง, เฉลยแบบฝึกหัด และคลังข้อสอบสุ่ม 10 ข้อ</p>
+    <p>รวมประเภท Chart พร้อมภาพกราฟจริง, เฉลยการบ้านพร้อมรูป และคลังข้อสอบสุ่ม 10 ข้อ</p>
   </header>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(0)">1. สรุปประเภท Chart & รูปตัวอย่างกราฟ</button>
-    <button class="tab-btn" onclick="switchTab(1)">2. เฉลยการบ้าน 2 (Q1 - Q5)</button>
+    <button class="tab-btn active" onclick="switchTab(0)">1. สรุปประเภท Chart & รูปตัวอย่าง</button>
+    <button class="tab-btn" onclick="switchTab(1)">2. เฉลยการบ้าน 2 พร้อมกราฟผลลัพธ์จริง</button>
     <button class="tab-btn" onclick="switchTab(2)">3. 🎲 แบบทดสอบสุ่ม 10 ข้อ</button>
   </div>
 
   <!-- ================= TAB 1: VISUAL GUIDE ================= -->
   <div class="tab-content active" id="tab-0">
-    <div class="framework-banner">
-      <h3>🎯 แผนผังความคิดในการเลือก Chart (The 4 Data Stories)</h3>
+    <div class="framework-card">
+      <h3>🎯 The 4 Data Stories: หัวใจการเลือก Chart</h3>
       <div class="framework-grid">
-        <div class="framework-item">
-          <strong>1. Trend over Time</strong><br>
-          ดูแนวโน้มตามเวลา (วัน/เดือน/ปี)<br>
-          👉 <em>Line Chart, Area Chart</em>
-        </div>
-        <div class="framework-item">
-          <strong>2. Comparison</strong><br>
-          เปรียบเทียบข้อมูลคนละหมวดหมู่<br>
-          👉 <em>Column Chart, Bar Chart</em>
-        </div>
-        <div class="framework-item">
-          <strong>3. Composition (100%)</strong><br>
-          ดูสัดส่วนเปอร์เซ็นต์ / Mix<br>
-          👉 <em>Pie, Donut, 100% Stacked</em>
-        </div>
-        <div class="framework-item">
-          <strong>4. Relationship</strong><br>
-          หาความสัมพันธ์ / เทียบ 2 สเกล<br>
-          👉 <em>Combo Chart, Scatter Plot</em>
-        </div>
+        <div class="framework-item"><strong>1. Trend over Time</strong><br>ดูแนวโน้มตามเวลา &rarr; Line, Area</div>
+        <div class="framework-item"><strong>2. Comparison</strong><br>เปรียบเทียบหมวดหมู่ &rarr; Column, Bar</div>
+        <div class="framework-item"><strong>3. Composition</strong><br>สัดส่วนร้อยละ / Mix &rarr; Pie, 100% Stacked</div>
+        <div class="framework-item"><strong>4. Relationship</strong><br>หาความสัมพันธ์ / 2 สเกล &rarr; Combo, Scatter</div>
       </div>
     </div>
 
     <div class="grid-charts">
-      
-      <!-- 1. LINE CHART -->
+      <!-- 1. Line Chart -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <!-- Grid lines -->
-            <line x1="30" y1="20" x2="240" y2="20" stroke="#e2e8f0" stroke-dasharray="3"/>
-            <line x1="30" y1="60" x2="240" y2="60" stroke="#e2e8f0" stroke-dasharray="3"/>
-            <line x1="30" y1="100" x2="240" y2="100" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Trend Line -->
-            <polyline fill="none" stroke="#2b6cb0" stroke-width="3" points="40,85 85,75 130,50 175,55 220,25" />
-            <!-- Markers -->
-            <circle cx="40" cy="85" r="4" fill="#2b6cb0" stroke="#fff" stroke-width="2"/>
-            <circle cx="85" cy="75" r="4" fill="#2b6cb0" stroke="#fff" stroke-width="2"/>
-            <circle cx="130" cy="50" r="4" fill="#2b6cb0" stroke="#fff" stroke-width="2"/>
-            <circle cx="175" cy="55" r="4" fill="#2b6cb0" stroke="#fff" stroke-width="2"/>
-            <circle cx="220" cy="25" r="4" fill="#2b6cb0" stroke="#fff" stroke-width="2"/>
-            <!-- Labels -->
-            <text x="35" y="118" font-size="10" fill="#718096">Jan</text>
-            <text x="80" y="118" font-size="10" fill="#718096">Feb</text>
-            <text x="123" y="118" font-size="10" fill="#718096">Mar</text>
-            <text x="168" y="118" font-size="10" fill="#718096">Apr</text>
-            <text x="212" y="118" font-size="10" fill="#718096">May</text>
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoLine"></canvas></div>
         <div class="chart-info">
-          <h3>Line Chart (กราฟเส้น) <span class="badge">Trend</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> ลากเส้นเชื่อมข้อมูลต่อเนื่อง เหมาะที่สุดสำหรับการดูแนวโน้ม ยอดขึ้น-ลง หรือความผันผวนตามลำดับเวลา</p>
-          <div class="keyword-tag">Keywords: Over time, Monthly, Trend, Changed over</div>
+          <h3>Line Chart <span class="badge">Trend</span></h3>
+          <p>ดูแนวโน้มขึ้นลงตามลำดับเวลาต่อเนื่อง</p>
+          <div class="keyword-tag">Keywords: Over time, Monthly, Trend</div>
         </div>
       </div>
 
-      <!-- 2. COLUMN CHART -->
+      <!-- 2. Column Chart -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <line x1="30" y1="100" x2="240" y2="100" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Bars -->
-            <rect x="45" y="30" width="30" height="70" rx="3" fill="#3182ce" />
-            <rect x="95" y="55" width="30" height="45" rx="3" fill="#3182ce" />
-            <rect x="145" y="70" width="30" height="30" rx="3" fill="#3182ce" />
-            <rect x="195" y="80" width="30" height="20" rx="3" fill="#3182ce" />
-            <!-- Labels -->
-            <text x="47" y="118" font-size="10" fill="#718096">Elec</text>
-            <text x="96" y="118" font-size="10" fill="#718096">Cloth</text>
-            <text x="146" y="118" font-size="10" fill="#718096">Home</text>
-            <text x="195" y="118" font-size="10" fill="#718096">Beauty</text>
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoCol"></canvas></div>
         <div class="chart-info">
-          <h3>Column Chart (แท่งแนวตั้ง) <span class="badge">Compare</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> ใช้ความสูงของแท่งเปรียบเทียบค่าเชิงปริมาณระหว่างหมวดหมู่ที่แยกจากกันอย่างชัดเจน</p>
-          <div class="keyword-tag">Keywords: Compare, Categories, Ranking, By product</div>
+          <h3>Column Chart <span class="badge">Compare</span></h3>
+          <p>เปรียบเทียบค่าเชิงปริมาณระหว่างหมวดหมู่</p>
+          <div class="keyword-tag">Keywords: Compare, Across categories</div>
         </div>
       </div>
 
-      <!-- 3. BAR CHART (HORIZONTAL) -->
+      <!-- 3. Bar Chart Horizontal -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <line x1="70" y1="10" x2="70" y2="115" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Horizontal Bars -->
-            <text x="10" y="30" font-size="9" fill="#718096">Electronics</text>
-            <rect x="72" y="20" width="140" height="14" rx="2" fill="#4299e1" />
-            <text x="10" y="58" font-size="9" fill="#718096">Clothing</text>
-            <rect x="72" y="48" width="95" height="14" rx="2" fill="#4299e1" />
-            <text x="10" y="86" font-size="9" fill="#718096">Home Acc.</text>
-            <rect x="72" y="76" width="65" height="14" rx="2" fill="#4299e1" />
-            <text x="10" y="112" font-size="9" fill="#718096">Beauty Care</text>
-            <rect x="72" y="102" width="45" height="14" rx="2" fill="#4299e1" />
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoBar"></canvas></div>
         <div class="chart-info">
-          <h3>Bar Chart (แท่งแนวนอน) <span class="badge">Long Text</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> หมุนแกนเป็นแนวนอน เหมาะมากเมื่อชื่อหมวดหมู่ยาว หรือมีรายการเยอะเกิน 7-10 รายการ</p>
-          <div class="keyword-tag">Keywords: Across categories with long labels, Ranking</div>
+          <h3>Bar Chart (แนวนอน) <span class="badge">Long Text</span></h3>
+          <p>เหมาะกับชื่อหมวดหมู่ที่ยาว หรือมีจำนวนรายการเยอะ</p>
+          <div class="keyword-tag">Keywords: Ranking, Long category names</div>
         </div>
       </div>
 
-      <!-- 4. PIE & DONUT CHART -->
+      <!-- 4. Donut / Pie -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <!-- Donut / Pie simulation -->
-            <circle cx="90" cy="65" r="45" fill="transparent" stroke="#3182ce" stroke-width="24" stroke-dasharray="120 283" stroke-dashoffset="0"/>
-            <circle cx="90" cy="65" r="45" fill="transparent" stroke="#48bb78" stroke-width="24" stroke-dasharray="75 283" stroke-dashoffset="-120"/>
-            <circle cx="90" cy="65" r="45" fill="transparent" stroke="#ed8936" stroke-width="24" stroke-dasharray="50 283" stroke-dashoffset="-195"/>
-            <circle cx="90" cy="65" r="45" fill="transparent" stroke="#9f7aea" stroke-width="24" stroke-dasharray="38 283" stroke-dashoffset="-245"/>
-            <!-- Legend -->
-            <rect x="160" y="30" width="10" height="10" fill="#3182ce" rx="2"/>
-            <text x="175" y="39" font-size="10" fill="#4a5568">Elec (42%)</text>
-            <rect x="160" y="50" width="10" height="10" fill="#48bb78" rx="2"/>
-            <text x="175" y="59" font-size="10" fill="#4a5568">Cloth (26%)</text>
-            <rect x="160" y="70" width="10" height="10" fill="#ed8936" rx="2"/>
-            <text x="175" y="79" font-size="10" fill="#4a5568">Home (18%)</text>
-            <rect x="160" y="90" width="10" height="10" fill="#9f7aea" rx="2"/>
-            <text x="175" y="99" font-size="10" fill="#4a5568">Beauty (14%)</text>
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoDonut"></canvas></div>
         <div class="chart-info">
-          <h3>Pie / Doughnut Chart <span class="badge">Part-to-Whole</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> นำข้อมูลรวมกันเป็น 100% แล้วตัดแบ่งเป็นชิ้นพาย เพื่อดูสัดส่วนร้อยละของแต่ละส่วนประกอบ</p>
-          <div class="keyword-tag">Keywords: Proportion, Share, Contribution, Percentage</div>
+          <h3>Pie / Donut Chart <span class="badge">Part-to-Whole</span></h3>
+          <p>ดูสัดส่วนร้อยละเทียบกับผลรวมทั้งหมด 100%</p>
+          <div class="keyword-tag">Keywords: Proportion, Share, % Contribution</div>
         </div>
       </div>
 
-      <!-- 5. 100% STACKED COLUMN -->
+      <!-- 5. 100% Stacked -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <line x1="35" y1="105" x2="235" y2="105" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Bar 1 (100% high) -->
-            <rect x="55" y="20" width="35" height="25" fill="#3182ce" />
-            <rect x="55" y="45" width="35" height="30" fill="#48bb78" />
-            <rect x="55" y="75" width="35" height="18" fill="#ed8936" />
-            <rect x="55" y="93" width="35" height="12" fill="#9f7aea" />
-            <text x="63" y="118" font-size="10" fill="#718096">Jan</text>
-            <!-- Bar 2 (100% high) -->
-            <rect x="115" y="20" width="35" height="30" fill="#3182ce" />
-            <rect x="115" y="50" width="35" height="26" fill="#48bb78" />
-            <rect x="115" y="76" width="35" height="15" fill="#ed8936" />
-            <rect x="115" y="91" width="35" height="14" fill="#9f7aea" />
-            <text x="123" y="118" font-size="10" fill="#718096">Feb</text>
-            <!-- Bar 3 (100% high) -->
-            <rect x="175" y="20" width="35" height="36" fill="#3182ce" />
-            <rect x="175" y="56" width="35" height="24" fill="#48bb78" />
-            <rect x="175" y="80" width="35" height="15" fill="#ed8936" />
-            <rect x="175" y="95" width="35" height="10" fill="#9f7aea" />
-            <text x="183" y="118" font-size="10" fill="#718096">Mar</text>
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoStacked"></canvas></div>
         <div class="chart-info">
           <h3>100% Stacked Column <span class="badge">Mix Over Time</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> ทุกแท่งสูงเท่ากันที่ 100% แสดงให้เห็นว่าสัดส่วนผสม (Mix) ของช่องทางต่างๆ เพิ่มหรือลดลงอย่างไรตามเวลา</p>
-          <div class="keyword-tag">Keywords: Mix of channels, Distribution over time</div>
+          <p>ดูสัดส่วนผสม (Mix) ที่เปลี่ยนแปลงไปในแต่ละเดือน</p>
+          <div class="keyword-tag">Keywords: Mix of channels over time</div>
         </div>
       </div>
 
-      <!-- 6. COMBO CHART (DUAL AXIS) -->
+      <!-- 6. Combo Dual Axis -->
       <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <!-- Left Axis (Orders) & Right Axis (Revenue) -->
-            <line x1="35" y1="20" x2="35" y2="105" stroke="#a0aec0" stroke-width="1"/>
-            <line x1="225" y1="20" x2="225" y2="105" stroke="#e53e3e" stroke-width="1"/>
-            <line x1="35" y1="105" x2="225" y2="105" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Bars (Orders - Left Axis) -->
-            <rect x="50" y="60" width="22" height="45" fill="#cbd5e0" rx="2" />
-            <rect x="85" y="50" width="22" height="55" fill="#cbd5e0" rx="2" />
-            <rect x="120" y="35" width="22" height="70" fill="#cbd5e0" rx="2" />
-            <rect x="155" y="42" width="22" height="63" fill="#cbd5e0" rx="2" />
-            <rect x="190" y="25" width="22" height="80" fill="#cbd5e0" rx="2" />
-            <!-- Line (Revenue - Right Axis) -->
-            <polyline fill="none" stroke="#e53e3e" stroke-width="2.5" points="61,70 96,62 131,45 166,50 201,30" />
-            <circle cx="61" cy="70" r="3" fill="#e53e3e"/>
-            <circle cx="96" cy="62" r="3" fill="#e53e3e"/>
-            <circle cx="131" cy="45" r="3" fill="#e53e3e"/>
-            <circle cx="166" cy="50" r="3" fill="#e53e3e"/>
-            <circle cx="201" cy="30" r="3" fill="#e53e3e"/>
-          </svg>
-        </div>
+        <div class="chart-box"><canvas id="demoCombo"></canvas></div>
         <div class="chart-info">
           <h3>Combo Chart Dual Axis <span class="badge">Two Scales</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> รวมกราฟแท่งและกราฟเส้นไว้ด้วยกัน มี 2 แกน Y ซ้าย-ขวา ใช้เมื่อตัวแปร 2 ตัวมีหน่วยและขนาดตัวเลขต่างกันมาก</p>
-          <div class="keyword-tag">Keywords: Aligned with, Revenue vs Orders, Secondary Axis</div>
+          <p>เทียบ 2 ตัวแปรที่มีสเกลต่างกันมากด้วย 2 แกน Y</p>
+          <div class="keyword-tag">Keywords: Aligned with, Secondary Axis</div>
         </div>
       </div>
-
-      <!-- 7. SCATTER PLOT -->
-      <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <line x1="35" y1="20" x2="35" y2="105" stroke="#cbd5e0" stroke-width="1.5"/>
-            <line x1="35" y1="105" x2="235" y2="105" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Trend guideline -->
-            <line x1="45" y1="95" x2="220" y2="30" stroke="#cbd5e0" stroke-dasharray="3"/>
-            <!-- Points -->
-            <circle cx="55" cy="90" r="4" fill="#805ad5"/>
-            <circle cx="80" cy="82" r="4" fill="#805ad5"/>
-            <circle cx="95" cy="70" r="4" fill="#805ad5"/>
-            <circle cx="120" cy="65" r="4" fill="#805ad5"/>
-            <circle cx="140" cy="58" r="4" fill="#805ad5"/>
-            <circle cx="165" cy="45" r="4" fill="#805ad5"/>
-            <circle cx="190" cy="38" r="4" fill="#805ad5"/>
-            <circle cx="215" cy="32" r="4" fill="#805ad5"/>
-            <text x="110" y="120" font-size="9" fill="#718096">Ad Spend (X)</text>
-            <text x="5" y="65" font-size="9" fill="#718096" transform="rotate(-90 10,65)">Revenue (Y)</text>
-          </svg>
-        </div>
-        <div class="chart-info">
-          <h3>Scatter Plot (กราฟจุด) <span class="badge">Correlation</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> พล็อตจุดตามค่า X และ Y เพื่อดูว่าตัวแปร 2 ตัวมีความสัมพันธ์เชิงสถิติ หรือแปรผันตามกันหรือไม่</p>
-          <div class="keyword-tag">Keywords: Correlation, Relationship, Effect of X on Y</div>
-        </div>
-      </div>
-
-      <!-- 8. WATERFALL CHART -->
-      <div class="chart-card">
-        <div class="chart-preview-box">
-          <svg width="260" height="130" viewBox="0 0 260 130">
-            <line x1="30" y1="105" x2="240" y2="105" stroke="#cbd5e0" stroke-width="1.5"/>
-            <!-- Floating Waterfall Blocks -->
-            <rect x="40" y="40" width="25" height="65" fill="#3182ce" rx="2" />
-            <line x1="65" y1="40" x2="80" y2="40" stroke="#a0aec0" stroke-dasharray="2" />
-            <rect x="80" y="40" width="25" height="25" fill="#e53e3e" rx="2" />
-            <line x1="105" y1="65" x2="120" y2="65" stroke="#a0aec0" stroke-dasharray="2" />
-            <rect x="120" y="65" width="25" height="15" fill="#e53e3e" rx="2" />
-            <line x1="145" y1="80" x2="160" y2="80" stroke="#a0aec0" stroke-dasharray="2" />
-            <rect x="160" y="68" width="25" height="12" fill="#38a169" rx="2" />
-            <line x1="185" y1="68" x2="200" y2="68" stroke="#a0aec0" stroke-dasharray="2" />
-            <rect x="200" y="68" width="25" height="37" fill="#2b6cb0" rx="2" />
-            <!-- Labels -->
-            <text x="37" y="118" font-size="9" fill="#718096">Revenue</text>
-            <text x="82" y="118" font-size="9" fill="#718096">-COGS</text>
-            <text x="123" y="118" font-size="9" fill="#718096">-Cost</text>
-            <text x="163" y="118" font-size="9" fill="#718096">+Other</text>
-            <text x="203" y="118" font-size="9" fill="#718096">Profit</text>
-          </svg>
-        </div>
-        <div class="chart-info">
-          <h3>Waterfall Chart (กราฟน้ำตก) <span class="badge">Cumulative</span></h3>
-          <p><strong>ลักษณะเด่น:</strong> แสดงแท่งลอยขั้นบันได เพื่อดูผลกระทบสะสมของการบวกและการลบจากจุดเริ่มต้นไปสู่ผลลัพธ์สุทธิ</p>
-          <div class="keyword-tag">Keywords: Cumulative effect, Revenue to Net Profit</div>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- ================= TAB 2: HOMEWORK 2 ================= -->
+  <!-- ================= TAB 2: HOMEWORK 2 (WITH REAL CHARTS) ================= -->
   <div class="tab-content" id="tab-1">
-    <div class="hw-box">
-      <h4>Q1: How has revenue changed over time?</h4>
-      <p><strong>คำตอบ: Line Chart (กราฟเส้น)</strong></p>
-      <p><strong>เหตุผล:</strong> ตาราง Table 1 เป็นข้อมูลรายเดือนต่อเนื่อง การดูความเปลี่ยนแปลงตามเวลา (Over time) กราฟเส้นจะช่วยให้เห็นแนวโน้ม (Trend) ได้ชัดเจนที่สุด</p>
-    </div>
-    <div class="hw-box">
-      <h4>Q2: Compare total revenue across product categories</h4>
-      <p><strong>คำตอบ: Column Chart หรือ Bar Chart (กราฟแท่ง)</strong></p>
-      <p><strong>เหตุผล:</strong> ตาราง Table 2 แบ่งสินค้าเป็นหมวดหมู่ (Electronics, Clothing, Home, Beauty) ซึ่งเป็นข้อมูลแบบ Discrete การใช้แท่งเปรียบเทียบเชิงปริมาณจึงชัดเจนและอ่านง่ายที่สุด</p>
-    </div>
-    <div class="hw-box">
-      <h4>Q3: What proportion of total revenue does each product category contribute?</h4>
-      <p><strong>คำตอบ: Pie Chart หรือ Doughnut Chart (กราฟวงกลม / โดนัท)</strong></p>
-      <p><strong>เหตุผล:</strong> คำสำคัญคือ "Proportion" และ "Contribute" หมายถึงสัดส่วนหรือส่วนแบ่งที่ประกอบขึ้นมาเป็น 100% จึงเหมาะกับกลุ่ม Part-to-whole</p>
-    </div>
-    <div class="hw-box">
-      <h4>Q4: How has the mix of acquisition channels changed over time?</h4>
-      <p><strong>คำตอบ: 100% Stacked Column Chart</strong></p>
-      <p><strong>เหตุผล:</strong> คำว่า "Mix" คือสัดส่วนผสมของช่องทางต่างๆ (Organic, Paid Ads, Email, Referral) ใน Table 3 และดูการเปลี่ยนแปลง "Over time" แท่ง 100% จะช่วยให้เห็นการขยาย/หดตัวของสัดส่วนในแต่ละเดือน</p>
-    </div>
-    <div class="hw-box">
-      <h4>Q5: Is revenue growth aligned with order growth?</h4>
-      <p><strong>คำตอบ: Combo Chart with Dual Axis (กราฟผสม 2 แกน)</strong></p>
-      <p><strong>เหตุผล:</strong> ต้องการเทียบว่า Revenue กับ Order เติบโตล้อไปด้วยกันไหม แต่สเกล Revenue (120-210) กับ Orders (1,500-2,500) ต่างกันเป็นสิบเท่า ต้องเปิดแกนรอง (Secondary Axis) เพื่อให้ดูแนวโน้มได้พร้อมกัน</p>
+    <div class="hw-container">
+      
+      <!-- Q1 -->
+      <div class="hw-card">
+        <div class="hw-card-grid">
+          <div class="hw-details">
+            <h4>Q1: How has revenue changed over time?</h4>
+            <p><span class="ans-badge">ตอบ: Line Chart</span></p>
+            <p><strong>ตารางที่ใช้:</strong> Table 1 (Monthly Performance)</p>
+            <p><strong>เหตุผล:</strong> โจทย์ต้องการดูการเปลี่ยนแปลงตามเวลา (Over time) ของรายได้ (Jan - Jun) จึงต้องใช้กราฟเส้นเพื่อดูทิศทางและแนวโน้มที่ชัดเจนที่สุด</p>
+          </div>
+          <div class="chart-box" style="height:220px;"><canvas id="hwQ1Chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="hw-card">
+        <div class="hw-card-grid">
+          <div class="hw-details">
+            <h4>Q2: Compare total revenue across product categories</h4>
+            <p><span class="ans-badge">ตอบ: Column Chart หรือ Bar Chart</span></p>
+            <p><strong>ตารางที่ใช้:</strong> Table 2 (Revenue by Product Category)</p>
+            <p><strong>เหตุผล:</strong> เปรียบเทียบยอดขายเชิงปริมาณระหว่างหมวดสินค้า 4 หมวด (Electronics, Clothing, Home, Beauty) ซึ่งเป็นข้อมูลแบบแยกหมวดหมู่ กราฟแท่งเปรียบเทียบความต่างได้ดีที่สุด</p>
+          </div>
+          <div class="chart-box" style="height:220px;"><canvas id="hwQ2Chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="hw-card">
+        <div class="hw-card-grid">
+          <div class="hw-details">
+            <h4>Q3: What proportion of total revenue does each product category contribute?</h4>
+            <p><span class="ans-badge">ตอบ: Doughnut Chart หรือ Pie Chart</span></p>
+            <p><strong>ตารางที่ใช้:</strong> Table 2 (Revenue by Product Category)</p>
+            <p><strong>เหตุผล:</strong> คำว่า "Proportion" และ "Contribute" สื่อถึงการดูสัดส่วนร้อยละของแต่ละส่วนประกอบเทียบกับภาพรวม 100%</p>
+          </div>
+          <div class="chart-box" style="height:220px;"><canvas id="hwQ3Chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="hw-card">
+        <div class="hw-card-grid">
+          <div class="hw-details">
+            <h4>Q4: How has the mix of acquisition channels changed over time?</h4>
+            <p><span class="ans-badge">ตอบ: 100% Stacked Column Chart</span></p>
+            <p><strong>ตารางที่ใช้:</strong> Table 3 (Orders by Channel Monthly)</p>
+            <p><strong>เหตุผล:</strong> คำว่า "Mix" คือสัดส่วนผสม และ "Changed over time" คือดูตามเดือน กราฟแท่ง 100% จะล็อกความสูงไว้เท่ากัน แล้วโชว์ว่า Organic, Paid Ads, Email, Referral มีสัดส่วนกินพื้นที่เท่าใดในแต่ละเดือน</p>
+          </div>
+          <div class="chart-box" style="height:220px;"><canvas id="hwQ4Chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="hw-card">
+        <div class="hw-card-grid">
+          <div class="hw-details">
+            <h4>Q5: Is revenue growth aligned with order growth?</h4>
+            <p><span class="ans-badge">ตอบ: Combo Chart with Dual Axis (แกนคู่)</span></p>
+            <p><strong>ตารางที่ใช้:</strong> Table 1 (Revenue & Orders)</p>
+            <p><strong>เหตุผล:</strong> Revenue (120-210) กับ Orders (1,500-2,500) สเกลต่างกันสิบเท่า จึงต้องใช้ Combo Chart โดยให้แกนซ้ายเป็น Orders (แท่ง) และแกนขวาเป็น Revenue (เส้น) เพื่อดูว่าแนวโน้มการเติบโตล้อไปด้วยกันหรือไม่</p>
+          </div>
+          <div class="chart-box" style="height:220px;"><canvas id="hwQ5Chart"></canvas></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -391,6 +256,130 @@
     document.querySelectorAll('.tab-content').forEach((c, idx) => c.classList.toggle('active', idx === i));
   }
 
+  // RENDER ALL CHARTS USING CHART.JS
+  window.addEventListener('DOMContentLoaded', () => {
+    // 1. Demo Line
+    new Chart(document.getElementById('demoLine'), {
+      type: 'line',
+      data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], datasets: [{ label: 'Sales', data: [12, 19, 15, 25, 32], borderColor: '#2b6cb0', backgroundColor: '#bee3f8', tension: 0.3, fill: false }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+
+    // 2. Demo Col
+    new Chart(document.getElementById('demoCol'), {
+      type: 'bar',
+      data: { labels: ['A', 'B', 'C', 'D'], datasets: [{ label: 'Total', data: [42, 26, 18, 14], backgroundColor: '#3182ce' }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+
+    // 3. Demo Bar Horizontal
+    new Chart(document.getElementById('demoBar'), {
+      type: 'bar',
+      data: { labels: ['Electronics', 'Clothing', 'Home Appliance', 'Beauty & Personal'], datasets: [{ data: [420, 260, 180, 140], backgroundColor: '#4299e1' }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+
+    // 4. Demo Donut
+    new Chart(document.getElementById('demoDonut'), {
+      type: 'doughnut',
+      data: { labels: ['Elec', 'Cloth', 'Home', 'Beauty'], datasets: [{ data: [42, 26, 18, 14], backgroundColor: ['#3182ce', '#48bb78', '#ed8936', '#9f7aea'] }] },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // 5. Demo Stacked
+    new Chart(document.getElementById('demoStacked'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar'],
+        datasets: [
+          { label: 'Organic', data: [40, 39, 40], backgroundColor: '#3182ce' },
+          { label: 'Ads', data: [33, 33, 35], backgroundColor: '#48bb78' },
+          { label: 'Email', data: [17, 18, 17], backgroundColor: '#ed8936' },
+          { label: 'Referral', data: [10, 10, 8], backgroundColor: '#9f7aea' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, max: 100 } } }
+    });
+
+    // 6. Demo Combo
+    new Chart(document.getElementById('demoCombo'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [
+          { type: 'bar', label: 'Orders (Left)', data: [1500, 1650, 2000, 1900], backgroundColor: '#cbd5e0', yAxisID: 'y' },
+          { type: 'line', label: 'Revenue (Right)', data: [120, 135, 160, 155], borderColor: '#e53e3e', yAxisID: 'y1', tension: 0.2 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { type: 'linear', position: 'left' }, y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } } }
+      }
+    });
+
+    // --- HOMEWORK REAL CHARTS ---
+    // HW Q1: Line Chart
+    new Chart(document.getElementById('hwQ1Chart'), {
+      type: 'line',
+      data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], datasets: [{ label: 'Revenue ($k)', data: [120, 135, 160, 155, 180, 210], borderColor: '#005f73', backgroundColor: '#0a9396', pointRadius: 5, tension: 0.2 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Revenue ($k) Over Time' } } }
+    });
+
+    // HW Q2: Column Chart
+    new Chart(document.getElementById('hwQ2Chart'), {
+      type: 'bar',
+      data: { labels: ['Electronics', 'Clothing', 'Home', 'Beauty'], datasets: [{ label: 'Revenue ($k)', data: [420, 260, 180, 140], backgroundColor: '#2b6cb0' }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Revenue by Product Category' } } }
+    });
+
+    // HW Q3: Doughnut Chart
+    new Chart(document.getElementById('hwQ3Chart'), {
+      type: 'doughnut',
+      data: { labels: ['Electronics (42%)', 'Clothing (26%)', 'Home (18%)', 'Beauty (14%)'], datasets: [{ data: [420, 260, 180, 140], backgroundColor: ['#2b6cb0', '#38a169', '#dd6b20', '#805ad5'] }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Proportion of Total Revenue' } } }
+    });
+
+    // HW Q4: 100% Stacked Column
+    new Chart(document.getElementById('hwQ4Chart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          { label: 'Organic', data: [40, 39.4, 40, 39.5, 40.9, 40], backgroundColor: '#3182ce' },
+          { label: 'Paid Ads', data: [33.3, 33.3, 35, 34.2, 36.4, 36], backgroundColor: '#48bb78' },
+          { label: 'Email', data: [16.7, 18.2, 17.5, 18.4, 15.9, 16], backgroundColor: '#ed8936' },
+          { label: 'Referral', data: [10, 9.1, 7.5, 7.9, 6.8, 8], backgroundColor: '#9f7aea' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Channel Mix (100% Stacked)' } },
+        scales: { x: { stacked: true }, y: { stacked: true, max: 100, ticks: { callback: v => v + '%' } } }
+      }
+    });
+
+    // HW Q5: Combo Chart Dual Axis
+    new Chart(document.getElementById('hwQ5Chart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          { type: 'bar', label: 'Orders', data: [1500, 1650, 2000, 1900, 2200, 2500], backgroundColor: '#cbd5e0', yAxisID: 'y' },
+          { type: 'line', label: 'Revenue ($k)', data: [120, 135, 160, 155, 180, 210], borderColor: '#e53e3e', pointRadius: 4, yAxisID: 'y1' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Revenue vs Orders (Dual Axis)' } },
+        scales: {
+          y: { type: 'linear', position: 'left', title: { display: true, text: 'Orders' } },
+          y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Revenue ($k)' } }
+        }
+      }
+    });
+  });
+
+  // QUIZ LOGIC
   const bank = [
     { q: "ต้องการติดตามยอดขายสินค้าตั้งแต่วันที่ 1 ม.ค. ถึง 31 ธ.ค. เพื่อดูว่าช่วงใดพุ่งสูงหรือซบเซา ควรเลือก Chart ใด?", opts: ["Line Chart (กราฟเส้น)", "Pie Chart (กราฟวงกลม)", "Scatter Plot", "Treemap"], a: 0, exp: "ข้อมูลลำดับเวลาต่อเนื่อง (Time-series / Trend) ใช้ Line Chart ดีที่สุด" },
     { q: "ต้องการเปรียบเทียบยอดขายรวมของพนักงานขาย 5 คนในแผนก เพื่อจัดอันดับคนทำยอดได้สูงสุด ควรเลือก Chart ใด?", opts: ["Scatter Plot", "Column หรือ Bar Chart (กราฟแท่ง)", "100% Stacked Area", "Bubble Chart"], a: 1, exp: "เปรียบเทียบข้อมูลเชิงปริมาณระหว่างหมวดหมู่ชัดเจน ใช้ Column หรือ Bar Chart" },
